@@ -37,3 +37,8 @@ There are some user-specific configurations that must be performed before using 
 * In pjsip.conf, each extension has a placeholder for the password used to register to the extension (typically \"\<password\>\"). These placeholders should be updated with the passwords chosen by each agent corresponding to the respective extension. The passwords for the WebRTC extensions should all be the same.
 * In manager.conf, the password for the AMI interface should be changed as well.
 * Each agent should have an entry at the end of agents.conf. The \"fullname\" attribute for each agent is optional. Currently, agents.conf has four agent entries which correspond to the default agent extensions, and should be updated as needed.
+
+## Notes
+
+* The sample dial plan will accept incoming calls from an open-source SIP phone such as Linphone.
+* To use ACE Direct with videophone providers, collaborate with the VRS providers and reconfigure Asterisk.

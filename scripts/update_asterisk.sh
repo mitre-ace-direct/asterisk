@@ -71,8 +71,9 @@ function error_check_args {
 	restartArg=false
         cliArg=false
         phoneNum=""	
-	version="15.3.0"
+	version="16.8.0"
 	done=false
+	
 
 	while [[ $done != true ]]
         do
@@ -277,12 +278,12 @@ function apply_asterisk_patches {
 	currentPath=$(pwd)
 	currentDir=$(basename $currentPath)
         if ! [[ $currentDir == "scripts" ]]; then
-		print_message "Error" "you are nto executing this script from the proper scripts directoty ---> Installation failed."
+		print_message "Error" "you are not executing this script from the proper scripts directory ---> Installation failed."
 		exit 1
 	else
 		AD=$(dirname $currentPath)
 	fi
-	# find the location of Asterisk 15.1.2
+	# find the location of Asterisk 16.8.0
         versionNum=$2
 	asteriskPath=$(find / -type d -name "asterisk-${versionNum}")
 	#dirName="asterisk-${versionNum}"
@@ -297,6 +298,8 @@ function apply_asterisk_patches {
         # loop over each patch in the patch directory 
         patches=$(find ${AD} -wholename "*/${versionNum}/*.patch")
 	
+: <<'BLOCK_COMMENT'
+
         # handle null patches
         if [[ $patches == "" ]]; then
                 print_message "Error" "did not find any patch files ---> exiting program"
@@ -309,7 +312,7 @@ function apply_asterisk_patches {
                 patchFileName=$(basename $patch)
                 sourceFileName=${patchFileName:0:-6}
 
-                # find the file to be patched within Asterisk 15.1.2 
+                # find the file to be patched within Asterisk 16.8.0 
                 # this may be an array if there are several files
                 fullSourceFilePaths=$(find ${asteriskPath} -name ${sourceFileName})
 
@@ -332,6 +335,7 @@ function apply_asterisk_patches {
 
         # alert user of patch completion 
         print_message "Success" "patches have been applied"
+BLOCK_COMMENT
 
         # rebuild source
         if [[ $1 == "true" ]]; then
@@ -343,9 +347,11 @@ function apply_asterisk_patches {
                         print_message "Notify" "moving to ${asteriskPath}"
                         cd $asteriskPath
                         # make
+			./configure --with-jansson-bundled
 			make && make install
 			make config
 			ldconfig
+			make config
 			# move back into the AD repo
 			print_message "Notify" "moving back into ${AD}/scripts"
 			cd "$AD/scripts"
@@ -368,7 +374,6 @@ function install_media {
 		exit 1
 	fi
 
-	
 
 	mediaFiles=$(find ../media -name '*.*')
 	mediaDir=/var/lib/asterisk/sounds

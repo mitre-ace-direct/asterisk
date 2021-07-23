@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Author       : Connor McCann
 # Project      : PJPROJECT Build For Asterisk ACEDirect
 # Date         : 06 Mar 2018
 # Purpose      : To rebuild Asterisk using a custom PJSIP stack 
@@ -32,7 +31,8 @@ function error_check_args {
 	# vars
 	build=true
 	clean=false
-	astVersion="15.3.0"
+	#astVersion="15.3.0"
+	astVersion="16.8.0"
 	pjVersion="2.7.1"
 	done=false
 	restartAst=true
